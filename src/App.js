@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import React from "react";
 
 import MoviesList from "./components/MoviesList";
@@ -12,7 +12,7 @@ function App() {
 
   const retryTimeoutRef = useRef(null); // to cancel retry
 
-  async function FetchMovieHandler() {
+  const FetchMovieHandler = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
@@ -43,7 +43,11 @@ function App() {
     }
 
     setIsLoading(false);
-  }
+  }, []);
+
+  useEffect(() => {
+    FetchMovieHandler();
+  }, []);
 
   function cancelRetryHandler() {
     setIsRetrying(false);
@@ -54,8 +58,13 @@ function App() {
   return (
     <React.Fragment>
       <section>
-        <button onClick={FetchMovieHandler}>Fetch Movies</button> <br></br><br></br><br></br><br></br>
-        {isRetrying && <button onClick={cancelRetryHandler}>Cancel Retry</button>}
+        <button onClick={FetchMovieHandler}>Fetch Movies</button> <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        {isRetrying && (
+          <button onClick={cancelRetryHandler}>Cancel Retry</button>
+        )}
       </section>
 
       <section>
